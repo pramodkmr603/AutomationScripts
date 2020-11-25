@@ -1,0 +1,181 @@
+package fpp;
+
+import org.testng.annotations.Test;
+import org.testng.annotations.BeforeClass;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.AfterClass;
+
+public class fpp {//name:FPP-00012170 
+	WebDriver d;
+	Logger logger=Logger.getLogger("fpp.class");
+	@Test
+	public void plants() throws InterruptedException {
+		PropertyConfigurator.configure("log4j.properties");
+		List<String>plants=new ArrayList<String>();
+		plants.add("Plants");
+		plants.add("Plants Authorized To Use");
+		plants.add("Plants Authorized to Produce");
+		List<String>plist=new ArrayList<String>();
+		WebElement tt=d.findElement(By.xpath("//*[@id=\"twentynine\"]/div/div/table/thead"));
+		List<WebElement>rows=tt.findElements(By.tagName("tr"));
+		List<WebElement>cols=rows.get(1).findElements(By.tagName("th"));
+		for(WebElement col:cols) {
+			String ss=col.getText();
+			plist.add(ss);
+			//System.out.println(ss);//print
+		}
+		logger.info("plants header obtained");
+		for(String s:plants) {
+			int count=0;
+			for(String w:plist) {
+		
+				if(s.equalsIgnoreCase(w)) {
+					System.out.println(s+" is present on webpage");	
+					break;
+				}
+				else {
+					count+=1;
+					if(count>=plist.size()) {
+						System.out.println(s+" not in webpage");
+					}
+					continue;
+				}
+			}
+		}
+		logger.info("compared plants table");
+//		
+	}
+	@Test
+	public void Lifecycle_Approval_Powerview() throws InterruptedException {
+		PropertyConfigurator.configure("log4j.properties");
+		Thread.sleep(5000);
+		List<String>life=new ArrayList<String>();
+		life.add("Tasks/Signatures");
+		life.add("Name");
+		life.add("Approver");
+		life.add("Title");
+		life.add("Approval Status");
+		life.add("Approval/Due Date");
+		life.add("Comments/Instructions");
+
+		List<String>val=new ArrayList<String>();
+		WebElement ltable=d.findElement(By.xpath("//*[@id=\"thirty\"]/div/div/table/thead"));
+//		WebElement ltable=d.findElement(By.id("thirty"));
+		List<WebElement>rows=ltable.findElements(By.tagName("tr"));
+		int rsize=rows.size();
+		for(int i=0;i<rsize;i++) {
+			List<WebElement>cols=rows.get(i).findElements(By.tagName("th"));
+			for(WebElement c:cols) {
+				String sc=c.getText();
+				val.add(sc);
+				//System.out.println(sc);
+			}
+		}
+		logger.info("lifecycle headers obtained");
+		for(String s:life) {
+			int count=0;
+			for(String w:val) {
+
+				if(s.equalsIgnoreCase(w)) {
+					System.out.println(s+" is present on webpage");
+					break;
+				}
+//				
+
+				else {
+					count+=1;
+					if(count>=val.size()) {
+						System.out.println(s+" not in webpage");
+					}
+
+					continue;
+				}
+			}
+		}
+		logger.info("compared lifecycle table");
+//		
+
+	}
+	@Test
+	public void Weights_and_Dimensions() throws InterruptedException {
+		PropertyConfigurator.configure("log4j.properties");
+		Thread.sleep(5000);
+		List<String>weight=new ArrayList<String>();
+		weight.add("W&D Status:");
+		weight.add("Unit Of Measure System:");
+//		WebElement we=d.findElement(By.id("thirtyfour"));
+		WebElement we=d.findElement(By.xpath("//*[@id=\"thirtyfour\"]"));
+		List<WebElement>wlist=we.findElements(By.id("pageheaders"));
+		logger.info("weight&dim headers obtained");
+		for(String s:weight) {
+			int count=0;
+			for(WebElement w:wlist) {
+				String s1=w.getText();
+				if(s.equalsIgnoreCase(s1)) {
+					System.out.println(s+" is present on webpage");
+					break;
+				}			
+
+				else {
+					count+=1;
+					if(count>=wlist.size()) {
+						System.out.println(s+" not in webpage");
+					}
+					continue;
+				}
+			}
+		}
+		logger.info("compared w&d table");		
+	}
+	@BeforeClass
+	public void beforeClass() throws InterruptedException {
+		PropertyConfigurator.configure("log4j.properties");
+		System.setProperty("webdriver.chrome.driver", "C:\\pramodkmr\\jars\\chromedriver_win32\\chromedriver.exe");
+		d=new ChromeDriver();
+		d.get("https://specsqaap.pg.com/login");
+		d.manage().window().maximize();
+		logger.info("in login page");
+		
+		Thread.sleep(1000);
+		d.manage().timeouts().implicitlyWait(30000, TimeUnit.SECONDS);
+		d.findElement(By.id("username")).sendKeys("Anywheretwo.im");
+		d.manage().timeouts().implicitlyWait(20000, TimeUnit.SECONDS);
+		d.findElement(By.id("password")).sendKeys("Sa061920");
+		d.manage().timeouts().implicitlyWait(50000, TimeUnit.SECONDS);
+		d.findElement(By.id("loginButton")).click();
+		d.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
+		Thread.sleep(5000);
+		
+		logger.info("successfully logged in");
+		d.findElement(By.id("searchBox")).sendKeys("FPP");
+		d.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
+		d.findElement(By.xpath("//*[@id=\"root\"]/div[2]/div[1]/div/div/form/div/div[1]/div/button")).click();
+		Thread.sleep(1000);
+		logger.info("searched for fpp");
+		d.findElement(By.xpath("//*[@id=\"root\"]/div[2]/div[2]/div/div/div[2]/div/div/div/div/table/tbody/tr[3]/td[1]/a")).click();			
+		Thread.sleep(1000);
+		logger.info("clicked on link 2170");
+//		d.findElement(By.xpath("//*[@id=\"root\"]/div[2]/div/div[1]/div/div/div/div[1]/div[2]/button")).click();
+//		d.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+//		d.findElement(By.xpath("//*[@id=\"root\"]/div[2]/div/div[1]/div/div/div/div[2]/div[23]/div[1]/button")).click();
+//		d.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+//		d.findElement(By.xpath("//*[@id=\"root\"]/div[2]/div/div[1]/div/div/div/div[2]/div[24]/div/button")).click();
+
+	}
+
+	@AfterClass
+	public void afterClass() {
+		PropertyConfigurator.configure("log4j.properties");
+		d.quit();
+		logger.info("driver has quit");
+	}
+
+}
