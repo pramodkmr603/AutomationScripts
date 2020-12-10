@@ -1,1 +1,4 @@
 For automation
+java files for webobjects apmp,app,mep and mip is provided.
+a main class named run is also provided
+fpp webobject done by shwetha and shreeya .
